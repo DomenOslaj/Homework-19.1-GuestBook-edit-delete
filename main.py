@@ -35,7 +35,7 @@ class MainHandler(BaseHandler):
 
 class GuestbookHandler(BaseHandler):
     def get(self):
-        messages = Message.query().fetch()
+        messages = Message.query(Message.deleted == False).fetch()
 
         params = {"messages": messages}
 
@@ -73,9 +73,24 @@ class EditMessageHandler(BaseHandler):
 
         return self.redirect_to("guestbook-site")
 
+class DeleteMessageHandler(BaseHandler):
+    def get(self, message_id):
+        message = Message.get_by_id(int(message_id))
+        params = {"message": message}
+
+        return self.render_template("delete_message.html", params=params)
+
+    def post(self, message_id):
+        message = Message.get_by_id(int(message_id))
+        message.deleted = True
+        message.put()
+
+        return self.redirect_to("guestbook-site")
+
 
 app = webapp2.WSGIApplication([
     webapp2.Route('/', MainHandler),
     webapp2.Route("/guestbook", GuestbookHandler, name="guestbook-site"),
     webapp2.Route("/message/<message_id:\d+>/edit", EditMessageHandler),
+    webapp2.Route("/message/<message_id:\d+>/delete", DeleteMessageHandler),
 ], debug=True)

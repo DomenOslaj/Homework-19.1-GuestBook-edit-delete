@@ -32,7 +32,7 @@
 
     <h3>Messages:</h3>
     {% for message in messages %}
-        <p> <b>{{ message.name }}</b> ( {{ message.email }} ),  {{ message.created.strftime ("%d.%m.%Y, %H:%M") }} ( <a href="/message/{{ message.key.id() }}/edit">EDIT</a> )</p>
+        <p> <b>{{ message.name }}</b> ( {{ message.email }} ),  {{ message.created.strftime ("%d.%m.%Y, %H:%M") }} ( <a href="/message/{{ message.key.id() }}/edit">EDIT</a>, <a href="/message/{{ message.key.id() }}/delete">DELETE</a> ) </p>
 
     <em>{{ message.message }}</em>
 
